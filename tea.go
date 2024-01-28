@@ -17,6 +17,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"syscall"
@@ -170,6 +171,8 @@ type Program struct {
 	// fps is the frames per second we should set on the renderer, if
 	// applicable,
 	fps int
+
+	excludeFinalNewline bool
 }
 
 // Quit is a special command that tells the Bubble Tea program to exit.
@@ -546,7 +549,11 @@ func (p *Program) Run() (Model, error) {
 		err = ErrProgramKilled
 	} else {
 		// Ensure we rendered the final state of the model.
-		p.renderer.write(model.View())
+		finalView := model.View()
+		if !p.excludeFinalNewline && !strings.HasSuffix(finalView, "\n") {
+			finalView += "\n"
+		}
+		p.renderer.write(finalView)
 	}
 
 	// Tear down.

@@ -63,6 +63,13 @@ func WithoutSignalHandler() ProgramOption {
 	}
 }
 
+// WithoutFinalNewline will make sure the final render of the model ends with a newline.
+func WithoutFinalNewline() ProgramOption {
+	return func(p *Program) {
+		p.excludeFinalNewline = true
+	}
+}
+
 // WithoutCatchPanics disables the panic catching that Bubble Tea does by
 // default. If panic catching is disabled the terminal will be in a fairly
 // unusable state after a panic because Bubble Tea will not perform its usual

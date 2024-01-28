@@ -43,6 +43,17 @@ func TestOptions(t *testing.T) {
 		}
 	})
 
+	t.Run("without final newline", func(t *testing.T) {
+		p := NewProgram(nil)
+		if p.removeFinalNewline {
+			t.Errorf("expected removeFinalNewline to be false, got false")
+		}
+		p = NewProgram(nil, WithoutFinalNewline())
+		if !p.removeFinalNewline {
+			t.Errorf("expected removeFinalNewline to be true, got false")
+		}
+	})
+
 	t.Run("filter", func(t *testing.T) {
 		p := NewProgram(nil, WithFilter(func(_ Model, msg Msg) Msg { return msg }))
 		if p.filter == nil {
